@@ -69,7 +69,7 @@ exports.default = function (sails) {
 			output: {
 				path: path.resolve(__dirname, '../../.tmp/public/'),
 				publicPath: '/',
-				filename: 'mobile/js/build/bundle.js'
+				filename: 'vueDesktop/js/build/bundle.js'
 			},
 			// resolveLoader: {
 			// 	root: path.join(__dirname, '../../node_modules')
