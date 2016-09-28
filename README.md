@@ -1,4 +1,4 @@
-# sails-hook-vue2-webpack2-sass
+# sails-hook-vue-desktop
 
 Sails.js hook that provides a Vue.js 2.0 frontend using Webpack 2.0 with SASS compilation.
 
