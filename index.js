@@ -74,6 +74,9 @@ exports.default = function (sails) {
 			// resolveLoader: {
 			// 	root: path.join(__dirname, '../../node_modules')
 			// },
+			resolve: {
+					alias: {vue: 'vue/dist/vue.js'}
+			},
 			plugins: plugins,
 			module: {
 				loaders: [ // not all are necessary, choose wisely
