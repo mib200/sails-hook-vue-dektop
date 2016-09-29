@@ -75,7 +75,9 @@ exports.default = function (sails) {
 			// 	root: path.join(__dirname, '../../node_modules')
 			// },
 			resolve: {
-					alias: {vue: 'vue/dist/vue.js'}
+				alias: {
+					vue: 'vue/dist/vue.js'
+				}
 			},
 			plugins: plugins,
 			module: {
@@ -85,6 +87,12 @@ exports.default = function (sails) {
 						loader: 'vue'
 					}, {
 						test: /\.(png|jpg|gif|svg)$/,
+						loader: 'file',
+						query: {
+							name: '[name].[ext]?[hash]'
+						}
+					}, {
+						test: /\.(woff2?|eot|ttf|otf)$/,
 						loader: 'file',
 						query: {
 							name: '[name].[ext]?[hash]'
