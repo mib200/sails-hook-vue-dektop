@@ -119,7 +119,7 @@ exports.default = function (sails) {
 				// for develop and debug your application
 				port: 4000,
 				// enable Hot Module Replacement with dev-server
-				hot: true,
+				// hot: true,
 				noInfo: true,
 				// sails.js public path
 				contentBase: path.resolve(__dirname, '../../.tmp/public/'),
