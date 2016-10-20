@@ -15,11 +15,15 @@ var plugins = [
 	new webpack.optimize.DedupePlugin(),
 	new WriteFilePlugin(),
 	new webpack.NoErrorsPlugin(),
+	new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-gb/),
 	new webpack.LoaderOptionsPlugin({
 		// minimize: config.enabled.minify,
 		debug: debug,
 		stats: {
-			colors: true
+			colors: true,
+			modules: true,
+			reasons: true,
+			errorDetails: true
 		},
 		// quiet: true,
 		options: {
@@ -76,7 +80,7 @@ exports.default = function (sails) {
 			// },
 			resolve: {
 				alias: {
-					vue: 'vue/dist/vue.js'
+					// vue: 'vue/dist/vue.js',
 				}
 			},
 			plugins: plugins,
