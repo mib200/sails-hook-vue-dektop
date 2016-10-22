@@ -6,6 +6,7 @@ var path = require('path');
 var WriteFilePlugin = require('write-file-webpack-plugin');
 var env = process.env.NODE_ENV || 'development';
 var debug = env === 'development';
+var StatsPlugin = require('stats-webpack-plugin');
 
 var entry = [
 	path.resolve(__dirname, '../../assets/vueDesktop/src/main.js') // set your main javascript file
@@ -15,15 +16,25 @@ var plugins = [
 	new webpack.optimize.DedupePlugin(),
 	new WriteFilePlugin(),
 	new webpack.NoErrorsPlugin(),
+	// new webpack.optimize.CommonsChunkPlugin({
+	// 	names: ['vendor', 'manifest']
+	// }),
+	// extract vendor chunks for better caching
+	new webpack.optimize.CommonsChunkPlugin({
+		name: 'vendor'
+	}),
 	new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /en-gb/),
+	new StatsPlugin('stats.json', {
+		chunkModules: true,
+		exclude: [/node_modules[\\\/]react/]
+	}),
 	new webpack.LoaderOptionsPlugin({
 		// minimize: config.enabled.minify,
 		debug: debug,
+		minimize: true,
 		stats: {
 			colors: true,
-			modules: true,
-			reasons: true,
-			errorDetails: true
+			chunks: false
 		},
 		// quiet: true,
 		options: {
@@ -33,7 +44,11 @@ var plugins = [
 					require('autoprefixer')({
 						browsers: ['last 2 versions']
 					})
-				]
+				],
+				// sass: ExtractTextPlugin.extract({
+				// 	loader: "css-loader!sass-loader",
+				// 	fallbackLoader: "vue-style-loader" // <- this is a dep of vue-loader
+				// })
 			},
 		}
 	})
@@ -69,11 +84,20 @@ exports.default = function (sails) {
 
 	sails.config.webpack = {
 		config: { // webpack config begin here
-			entry: entry,
+			entry: {
+				entry,
+				vendor: [
+					'vue',
+					'vue-resource',
+					'vue-router',
+					'vuex',
+					'vuex-router-sync'
+				]
+			},
 			output: {
 				path: path.resolve(__dirname, '../../.tmp/public/'),
 				publicPath: '/',
-				filename: 'vueDesktop/js/build/bundle.js'
+				filename: 'vueDesktop/js/build/[name].js'
 			},
 			// resolveLoader: {
 			// 	root: path.join(__dirname, '../../node_modules')
@@ -111,7 +135,7 @@ exports.default = function (sails) {
 					}
 				]
 			},
-			devtool: '#eval-source-map'
+			devtool: '#cheap-module-source-map'
 		}, // webpack config ends here
 		development: { // dev server config
 			// webpack: {}, // separate webpack config for the dev server or defaults to the config above
@@ -125,6 +149,7 @@ exports.default = function (sails) {
 				// enable Hot Module Replacement with dev-server
 				// hot: true,
 				noInfo: true,
+				stats: 'errors-only',
 				// sails.js public path
 				contentBase: path.resolve(__dirname, '../../.tmp/public/'),
 				// bypass sails.js server
